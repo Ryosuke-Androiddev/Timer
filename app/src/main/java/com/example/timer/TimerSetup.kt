@@ -28,40 +28,23 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun TimerSetup(
-    timerValue: Long,
-    buttonColor: Color,
-    inActiveBarColor: Color,
-    activeBarColor: Color,
-    initialValue: Long = 1L
+    timerValue: Long?,
+    buttonColor: Color
 ){
-
-
-    var size by remember {
-        mutableStateOf(IntSize.Zero)
-    }
-
-    //bar の進み具合
-    var value by remember {
-        mutableStateOf(initialValue)
-    }
-
-    //現在の時計の時間
     var currentTime by remember {
-        mutableStateOf(timerValue)
+        mutableStateOf(timerValue!!)
     }
 
-    //走っているか
     var isTimerRunning by remember {
         mutableStateOf(false)
     }
 
     var progress by remember {mutableStateOf(1f)}
 
-    LaunchedEffect(key1 = currentTime, key2 = isTimerRunning) {
-        if(currentTime > 0 && isTimerRunning) {
+    LaunchedEffect(key1 = isTimerRunning) {
+        if(isTimerRunning) {
             delay(1000L)
             currentTime -= 1000L
-            value = currentTime / timerValue
         }
     }
 
@@ -78,7 +61,7 @@ fun TimerSetup(
             modifier = Modifier.fillMaxSize()
         ) {
             Text(
-                text = (currentTime / 1000L).toString(),
+                text = currentTime.toString(),
                 fontSize = 44.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
@@ -95,14 +78,13 @@ fun TimerSetup(
             Button(
                 onClick = {
                     if (currentTime <= 0L){
-                        currentTime = timerValue
                         isTimerRunning = true
                     } else {
                         isTimerRunning = !isTimerRunning
                     }
                 },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = if (!isTimerRunning || currentTime <= 0L){
+                    backgroundColor = if (!isTimerRunning){
                         Color.Green
                     } else {
                         Color.Red
@@ -116,7 +98,7 @@ fun TimerSetup(
                 )
                 Text(
                     text =
-                    if (isTimerRunning && currentTime >= 0L) "Stop"
+                    if (isTimerRunning) "Stop"
                     else "Start"
                 )
             }

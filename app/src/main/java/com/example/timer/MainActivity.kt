@@ -26,12 +26,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            TimerSetup(
-                timerValue = 100L * 1000L,
-                buttonColor = Color.Green,
-                inActiveBarColor = Color.DarkGray,
-                activeBarColor = Color.Red
-            )
+            TimerNavigation()
         }
     }
 }
